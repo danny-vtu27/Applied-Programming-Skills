@@ -1,0 +1,27 @@
+import java.util.*;
+
+class Solution {
+    public boolean canFinish(int n, int[][] pre) {
+        int[] indeg = new int[n];
+        List<List<Integer>> g = new ArrayList<>();
+        for (int i = 0; i < n; i++) g.add(new ArrayList<>());
+
+        for (int[] p : pre) {
+            g.get(p[1]).add(p[0]);
+            indeg[p[0]]++;
+        }
+
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) if (indeg[i]==0) q.offer(i);
+
+        int count = 0;
+        while (!q.isEmpty()) {
+            int cur = q.poll();
+            count++;
+            for (int nei : g.get(cur)) {
+                if (--indeg[nei]==0) q.offer(nei);
+            }
+        }
+        return count == n;
+    }
+}
